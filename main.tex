@@ -1,0 +1,740 @@
+
+%============================================================================%
+%
+%	DOCUMENT DEFINITION
+%
+%============================================================================%
+
+\documentclass[10pt,A4]{article}	
+
+
+%----------------------------------------------------------------------------------------
+%	ENCODING
+%----------------------------------------------------------------------------------------
+\usepackage[utf8]{inputenc}		
+
+%-----------------------------------------------------------
+%	qr code
+% -----------------------------
+\usepackage{qrcode}
+%	LOGIC
+%----------------------------------------------------------------------------------------
+
+% provides \isempty test
+\usepackage{xstring, xifthen}
+
+%----------------------------------------------------------------------------------------
+%	FONT BASICS
+%----------------------------------------------------------------------------------------
+% for cvtag
+\usepackage{tcolorbox}
+\usepackage[default]{raleway}
+\renewcommand*\familydefault{\sfdefault} 	
+
+% more font size definitions
+\usepackage{moresize}
+\usepackage[T1]{fontenc}
+%----------------------------------------------------------------------------------------
+%	FONT AWESOME ICONS
+%---------------------------------------------------------------------------------------- 
+
+% include the font awesome icon set
+\usepackage{fontawesome}
+
+% use to vertically center content
+% credits to: http://tex.stackexchange.com/questions/7219/how-to-vertically-center-two-images-next-to-each-other
+\newcommand{\vcenteredinclude}[1]{\begingroup
+\setbox0=\hbox{\includegraphics{#1}}%
+\parbox{\wd0}{\box0}\endgroup}
+
+% use to vertically center content
+% credits to: http://tex.stackexchange.com/questions/7219/how-to-vertically-center-two-images-next-to-each-other
+\newcommand*{\vcenteredhbox}[1]{\begingroup
+\setbox0=\hbox{#1}\parbox{\wd0}{\box0}\endgroup}
+
+% icon shortcut
+\newcommand{\icon}[3] { 							
+	\makebox(#2, #2){\textcolor{maincol}{\csname fa#1\endcsname}}
+}	
+
+% icon with text shortcut
+\newcommand{\icontext}[4]{ 						
+	\vcenteredhbox{\icon{#1}{#2}{#3}}  \hspace{2pt}  \parbox{0.9\mpwidth}{\textcolor{#4}{#3}}
+}
+
+% icon with website URL
+\newcommand{\iconhref}[5]{ 						
+    \vcenteredhbox{\icon{#1}{#2}{#5}}  \hspace{2pt} \href{#4}{\textcolor{#5}{#3}}
+}
+
+% icon with email link
+\newcommand{\iconemail}[5]{ 						
+    \vcenteredhbox{\icon{#1}{#2}{#5}}  \hspace{2pt} \href{mailto:#4}{\textcolor{#5}{#3}}
+}
+
+%----------------------------------------------------------------------------------------
+%	PAGE LAYOUT  DEFINITIONS
+%----------------------------------------------------------------------------------------		
+
+% we use paracol to display breakable two columns
+\usepackage{paracol}
+
+% define page styles using geometry
+\usepackage[a4paper]{geometry}
+
+% remove all possible margins
+\geometry{top=1cm, bottom=1cm, left=1cm, right=1cm}
+
+\usepackage{fancyhdr}
+\pagestyle{empty}
+
+% indentation is zero
+\setlength{\parindent}{0mm}
+
+%----------------------------------------------------------------------------------------
+%	TABLE /ARRAY DEFINITIONS
+%---------------------------------------------------------------------------------------- 
+
+% extended aligning of tabular cells
+\usepackage{array}
+
+\newcolumntype{x}[1]{%
+>{\raggedleft\hspace{0pt}}p{#1}}%
+
+
+%----------------------------------------------------------------------------------------
+%	GRAPHICS DEFINITIONS
+%---------------------------------------------------------------------------------------- 
+
+%for the header image
+\usepackage{graphicx}
+
+%for drawing graphics		
+\usepackage{tikz}				
+\usetikzlibrary{shapes, backgrounds,mindmap, trees}
+
+%----------------------------------------------------------------------------------------
+%	Color DEFINITIONS
+%---------------------------------------------------------------------------------------- 
+\usepackage{transparent}
+\usepackage{color}
+
+% primary color
+\definecolor{maincol}{RGB}{ 45, 50, 90 }
+
+% accent color, secondary
+% \definecolor{accentcol}{RGB}{ 250, 150, 10 }
+
+% dark color
+\definecolor{darkcol}{RGB}{ 70, 70, 70 }
+
+% light color
+\definecolor{lightcol}{RGB}{245,245,245}
+
+
+% Package for links, must be the last package used
+\usepackage[hidelinks]{hyperref}
+
+% returns minipage width minus two times \fboxsep
+% to keep padding included in width calculations
+% can also be used for other boxes / environments
+\newcommand{\mpwidth}{\linewidth-\fboxsep-\fboxsep}
+	
+
+
+%============================================================================%
+%
+%	CV COMMANDS
+%
+%============================================================================%
+
+%----------------------------------------------------------------------------------------
+%	 CV LIST
+%----------------------------------------------------------------------------------------
+
+% renders a standard latex list but abstracts away the environment definition (begin/end)
+\newcommand{\cvlist}[1] {
+	\begin{itemize}{#1}\end{itemize}
+}
+
+%----------------------------------------------------------------------------------------
+%	 CV TEXT
+%----------------------------------------------------------------------------------------
+
+\newcommand{\cvtext}[1] {
+	\begin{tabular*}{1\mpwidth}{p{0.98\mpwidth}}
+		\parbox{1\mpwidth}{#1}
+	\end{tabular*}
+}
+
+%----------------------------------------------------------------------------------------
+%	CV SECTION
+%----------------------------------------------------------------------------------------
+\newcommand{\cvsection}[1] {
+	\vspace{10pt}
+	    \textbf{\Large{\textcolor{black}{\uppercase{#1}}}} \\[-4pt]
+		\textcolor{maincol}{ \rule{0.1\textwidth}{2pt}} \\
+			
+}
+
+%	CV WORKSHOP
+%----------------------------------------------------------------------------------------
+\newcommand{\cvworkshop}[4] {
+\begin{itemize}
+    \item [\textcolor{blue}{\faCertificate}]\parbox{\mpwidth}{
+		\begin{tabular*}{1\mpwidth}{p{0.72\mpwidth}  r}
+	 		\textcolor{blue}{\textbf{#2}} & \colorbox{maincol}{\makebox[0.25\mpwidth]{\textcolor{white}{#1}}}
+		\end{tabular*}
+	}
+\end{itemize}
+           \hspace{1cm} \textcolor{maincol}{\textbf{#3}#4}	
+}
+
+
+%----------------------------------------------------------------------------------------
+%	CV PROJECT
+%----------------------------------------------------------------------------------------
+\newcommand{\cvproject}[5] {
+\begin{itemize}
+    \item [\textcolor{blue}{\faGears}]\parbox{\mpwidth}{
+		\begin{tabular*}{1\mpwidth}{p{0.72\mpwidth}  r}
+	 		\textcolor{blue}{\textbf{{#2} \textcolor{black}{ --- Mentor - #5}}} & \colorbox{maincol}{\makebox[0.25\mpwidth]{\textcolor{white}{#1}}}
+		\end{tabular*}
+	}
+\end{itemize}
+            \begin{itemize}
+               \item [] \textbf{Keys: }\textcolor{black}{#3}
+               \item [] \textbf{Brief Description: }\textcolor{black}{#4}
+           \end{itemize}
+           
+
+}
+
+%----------------------------------------------------------------------------------------
+%	 Certificates
+\newcommand{\cvcertificate}[3] {
+	\begin{itemize}
+	    \item [\textcolor{blue}{\textbf{\faTrophy} }]\parbox{\mpwidth}{
+		\begin{tabular*}{1\mpwidth}{p{0.72\mpwidth}  r}
+	 		\textcolor{blue}{\textbf{#2}} & \colorbox{maincol}{\makebox[0.25\mpwidth]{\textcolor{white}{#1}}} 
+			
+		\end{tabular*}
+		}
+	\end{itemize}
+	\textcolor{maincol}{\hspace{1cm} \textbf{Issued by #3}}
+}
+
+	
+%----------------------------------------------------------------------------------------
+%	CV SKILL
+%----------------------------------------------------------------------------------------
+
+\newcommand{\cvskill}[3] {
+	\begin{tabular*}{1\mpwidth}{p{0.75\mpwidth}  r}
+ 		\textcolor{black}{\textbf{#1}} & \textcolor{maincol}{#2}\\
+	\end{tabular*}%
+	
+	\hspace{4pt}
+	\begin{tikzpicture}[scale=1,rounded corners=2pt,very thin]
+		\fill [lightcol] (0,0) rectangle (1\mpwidth, 0.15);
+		\fill [maincol] (0,0) rectangle (#3\mpwidth, 0.15);
+  	\end{tikzpicture}%
+}
+
+%----------------------------------------------------------------------------------------
+%	 CV EVENT
+%---------------------------------------------------------------------------------------- 
+\newcommand{\cvevent}[4] {
+	
+	\parbox{\mpwidth}{
+		\begin{tabular*}{1\mpwidth}{p{0.72\mpwidth}  r}
+	 		\textcolor{blue}{\textbf{#2}} & \colorbox{maincol}{\makebox[0.25\mpwidth]{\textcolor{white}{#1}}} \\
+			\textcolor{maincol}{\textbf{#3}} & \\
+		\end{tabular*}\\[4pt]
+	
+		\ifthenelse{\isempty{#4}}{}{
+			\cvtext{#4}\\
+		}
+	}
+	
+}
+
+%	 SUB EVENT
+%----------------------------------------------------------------------------------------
+\newcommand{\cvsubevent}[1] {
+	\begin{flushleft}
+	    \textbf{\large{\textcolor{blue}{{#1}}}}
+	\end{flushleft}
+}
+
+%----------------------------------------------------------------------------------------
+% EXTRACURRICULARS
+\newcommand{\cvextra}[3] {
+	\parbox{\mpwidth}{
+		\begin{tabular*}{1\mpwidth}{p{0.72\mpwidth}  r}
+	 		\textcolor{blue}{\textbf{\faTrophy \hspace{5pt} #2}} & \colorbox{maincol}{\makebox[0.25\mpwidth]{\textcolor{white}{#1}}} \\
+			\textcolor{maincol}{\hspace{13pt} \textbf{Organised at  #3}} & \\
+		\end{tabular*}\\[4pt]
+	
+		}
+	
+}
+
+%----------------------------------------------------------------------------------------
+%	 CV META EVENT
+%----------------------------------------------------------------------------------------
+\newcommand{\cvmetaevent}[4] {
+	\textcolor{blue} {\cvtext{\textbf{\begin{flushleft}#1\end{flushleft}}}}
+
+	\ifthenelse{\isempty{#2}}{}{
+	\textcolor{maincol} {\cvtext{\textbf{#2}} }
+	}
+        \vspace{5pt}
+	\ifthenelse{\isempty{#3}}{}{
+		\cvtext{{ \textcolor{black} {#3} }}\\
+	}
+
+	\cvtext{#4}\\
+}
+
+%---------------------------------------------------------------------------------------
+%	QR CODE
+%----------------------------------------------------------------------------------------
+\newcommand{\cvqrcode}[1] {
+	\begin{center}
+		%\includegraphics[width={#1}\mpwidth]{ \qrcode}
+            %\quad
+            \hspace{-10pt}
+            \qrcode[height=1in]{#1}
+	\end{center}
+}
+%	CV TAG
+%----------------------------------------------------------------------------------------
+% CV tag for skills
+\newcommand{\cvtag}[1]{%
+  \tikz[baseline]\node[anchor=base,draw=black!30,rounded corners,inner xsep=1.5ex,inner ysep =1ex,text height=1.5ex,text depth=.4ex]{\normalize \textcolor{maincol}{\textbf{#1}}};
+}
+
+%=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
+%,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+                       % EDIT AFTER THIS POINT
+%''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+%=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
+
+
+%============================================================================%
+%
+%
+%
+%	DOCUMENT CONTENT
+%
+%
+%
+%============================================================================%
+\begin{document}
+\columnratio{0.31}
+\setlength{\columnsep}{2.2em}
+\setlength{\columnseprule}{4pt}
+\colseprulecolor{lightcol}
+\begin{paracol}{2}
+\begin{leftcolumn}
+%---------------------------------------------------------------------------------------
+% IMAGE
+%----------------------------------------------------------------------------------------
+\includegraphics[width=\linewidth]{vishal_1.jpg}	%trimming relative to image size
+\begin{center}
+    \faMale \hspace{5pt} (He/Him) \\
+    \textbf{DOB: } March 18, 1999 \hspace{5pt} \faBirthdayCake\\[6pt]
+\end{center}
+
+%\vfill\null
+\cvsection{CONTACTS}
+
+
+\iconemail{EnvelopeSquare}{14}{vishal.kumar.180399}{vishal.kumar.180399@gmail.com}{black}\\[6pt]
+\icontext{Github}{14}{\href{https://github.com/vkvs4252}{vkvs4252}}{black}\\[6pt]
+\icontext{Linkedin}{14}{\href{https://www.linkedin.com/in/vishal-kumar-iiser-mohali/}{vishal-kumar-iiser-mohali}}{black}\\[6pt]
+\icontext{Phone}{14}{+91 91101 09552}{black}\\[6pt]
+%\vfill\null
+
+%---------------------------------------------------------------------------------------
+% QR code
+\vspace{-5pt}
+\cvsubevent{Scan below to download}
+\begin{center}
+    \cvqrcode{https://drive.google.com/file/d/1f-BvKEvXJEHhyAXOpj3aa8XOw-a1JQlU/view?usp=share_link}
+\end{center}
+
+
+%---------------------------------------------------------------------------------------
+%	AWARDS
+\cvsection{AWARDS}
+
+%\cvskill{Skill_Name} {Years of experience} {percentage of bar fill} \\[-2pt]
+
+\textbf{\faCertificate  \hspace{5pt} \textcolor{blue}{SHE-INSPIRE Scholarship} }
+
+\vspace{5pt}
+\hspace{20pt}\textbf{DST-Government of India}\\
+
+\textbf{\faCertificate \hspace{5pt} \textcolor{blue}{Merit-cum-Means scholarship} }
+
+\vspace{5pt}
+\hspace{20pt}\textbf{IISER-Mohali, India}\\
+
+%----------------------------------------------------------------------------------------
+%	SKILLS
+\cvsection{SKILLS}
+\cvsubevent{Medical Imaging} 
+
+\cvskill{Fiber-Optics} {} {0.6} \\
+\cvskill{Ultrasound/Acoustics} {} {0.7} \\
+\cvskill{Optoacoustics methods} {} {0.7} \\
+\newpage
+\cvskill{Xray-CT and Optical-CT} {} {0.65} \\
+\cvskill{Phantom Fabrication} {} {0.8} \\
+\cvskill{CNC Machine, Sputtering Machine, \& Electrospining} {} {0.8} \\
+\cvskill{Instrumentation} {} {0.8}
+\cvskill{Image processing} {} {0.6} \\
+\cvskill{Signal processing} {} {0.6} \\
+\cvskill{Data Analysis} {} {0.8} \\
+
+\cvsubevent{Electronic Devices}
+
+\cvskill{Arduino} {} {0.8} \\
+\cvskill{Raspberry pi} {} {0.9} \\
+\cvskill{IR Sensors} {} {0.6} \\
+\cvskill{Stepper \& Servo motors} {} {0.9} \\
+\cvskill{Oscilloscope} {} {0.7} \\
+\cvskill{XY translation stage} {} {0.8} \\
+
+
+\cvsubevent{Coding}
+
+\cvskill{Machine Learning, AI and Computer Vision} {} {0.75} \\
+\cvskill{Python} {} {0.9} \\
+\cvskill{C++} {} {0.5} \\
+\cvskill{Linux} {} {0.5} \\
+\cvskill{MATLAB \& Simulink} {} {0.7} \\
+\cvskill{\LaTeX} {} {0.75} \\
+\vspace{-4pt}
+\cvsubevent{Design \& Simulation}
+
+\cvskill{COMSOL Multiphysics} {} {0.8} \\
+\cvskill{SolidWorks} {} {0.7} \\
+\cvskill{Blender} {} {0.3} \\
+\cvskill{Proteus 8.2} {} {0.4} \\
+%\cvskill{Origin} {} {0.2} \\
+\vspace{-4pt}
+\cvsubevent{Spectroscopy}
+
+\cvskill{IR/FTIR spectroscopy } {} {0.8} \\
+\cvskill{UV-Vis spectroscopy} {} {0.7} \\
+
+ \cvsection{SOFT SKILLS}
+
+    \begin{center}
+        
+        \cvtag{Creativity}\cvtag{Curiosity}\cvtag{Flexibility}\cvtag{Self Confidence}\cvtag{Ability to Plan and Organize} \cvtag{Adaptability} \cvtag{Eye for Details}\cvtag{Problem Solving}\cvtag{Team Working}\cvtag{Love Learning New Things}\cvtag{Self-motivated}\cvtag{Good Communication}\cvtag{Management }\cvtag{Good Listener}\cvtag{Patience}
+    \end{center}
+
+\cvsubevent{Languages}
+
+\cvskill{English} {12+ yrs} {0.8} \\
+\cvskill{Hindi} {15+ yrs} {0.8} \\
+\cvskill{Sanskrit} {1+ yrs} {0.2} \\
+
+%---------------------------------------------------------------------------------------
+
+%	ACHIEVEMENTS
+%----------------------------------------------------------------------------------------
+\cvsection{ACHIEVEMENTS}
+
+\cvmetaevent
+{Qualified level-1 geophysicist examination}
+{Geo-scientist and geo-physicist prelim. examination, 2022}{}
+{This exam is organized by the Union Public Service Commission(UPSC), Government of India.}
+
+\cvmetaevent
+{\textbf{EFSET}}
+{C2-PROFICIENCY IN ENGLISH}{}
+{A certificate issued against the English level with a score of 71/100 on the EFSET score scale and C2 Proficient according to the Common European Framework of Reference (CEFR).}
+    
+\end{leftcolumn}
+\begin{rightcolumn}
+
+
+%---------------------------------------------------------------------------------------
+%	TITLE  HEADER
+%----------------------------------------------------------------------------------------
+\fcolorbox{white}{maincol}{
+        \begin{minipage}[c][3.5cm][c]{0.98\mpwidth}
+    	\begin {center}
+    		\HUGE{ \textbf{ \textcolor{white}{ \uppercase{ VISHAL KUMAR } } } } \\[-24pt]
+    		\textcolor{white}{ \rule{0.1\textwidth}{1.25pt} } \\[4pt]
+    		\large{ \textcolor{white} {Product Developer \& Researcher, SCTR's PICT, Pune, India, 411043 } }
+    	\end {center}
+        \end{minipage}
+        }\\[14pt]
+
+\vspace{-12pt}
+
+%---------------------------------------------------------------------------------------
+%	EDUCATION
+%----------------------------------------------------------------------------------------
+%\vfill\null
+\cvsection{EDUCATION}
+
+\cvevent
+	{\textbf{2017 - 2022}}
+	{\faBook \hspace{5pt} Integrated BS-MS}
+	{IISER-Mohali, Punjab (India)}
+	{Current Status: \textbf{Passed}}
+%\vfill\null
+\vspace{-5pt}
+ \begin{center}
+ % \arrayrulecolor[HTML]{DB5800}
+\begin{tabular}{ |c|c|c| c| }
+\hline
+% \rowcolor{lightgray}
+\textbf{Programme}  & \textbf{Subjects}           & \textbf{Score}           & \textbf{CONSTITUENTS}  \\
+\hline
+ MAJOR     & \textbf{Physical Sciences} & \textbf{CPI: 8.2/10}    & Other courses + 1+ 2\\ 
+ \hline
+ MINOR     & \textbf{Data Sciences}     & -     & Component 1\\  
+ \hline
+ MS Thesis & \textbf{Medical Physics}   & -    & Component 2 \\  
+ \hline
+\end{tabular}
+\end{center}
+
+
+
+%	RESEARCH  EXPERIENCE
+%----------------------------------------------------------------------------------------
+% \vfill\null
+% \vspace{10pt}
+\cvsection{RESEARCH EXPERIENCE}
+\cvevent
+	{\textbf{Nov 22 - Ongoing}}
+	{\faGears \hspace{5pt} Product Developer \& Researcher}
+	{SCTR's Pune Institute of Computer Technology, Pune, Maharashtra (India)}
+	{\begin{itemize}
+	    \item [] \textbf{Responsibilities: } Applied Computer Vision, Machine learning, and AI applications to develop a system for real-time sign language recognition, Tried various CNN models to get improved learning, Automated SONY DSLR camera with Python to prepare the dataset, tried different Image Processing, and augmentation methods, and trained models in MATLAB and Jupyter-notebook (Python).
+	\end{itemize}}{} 
+%\vfill\null
+
+\cvevent
+	{\textbf{Aug 22 - Nov 22}}
+	{\faGears \hspace{5pt} Research Assistant}
+	{Birla Institute of Computer Technology, Deoghar, Jharkhand (India)}
+	{\begin{itemize}
+	    \item [] \textbf{Responsibilities: }Applications of Digital Image Processing, Segmentation, and optimization techniques
+	\end{itemize}}{} 
+%\vfill\null
+
+\cvproject
+	{\textbf{May 21 - Jun 22}}
+	{MS Thesis Project: To measure Young's Modulus of micron-sized particles using Photoacoustic methods}
+        {Microscope - Class-3 Pulsed Laser - IR and Vis CW Lasers - Dichroics - Transducers - Optical-Fiber- SolidWorks - 3D printers - Optics tools - Lenses and Mirrors- Sputtering Machine - Electrospinning Machine - Desiccator - Oscilloscope - signal detection - FFT/NUFFT |Phantom fabrication - Data analysis - COMSOL Multiphysics - 3D-Simulation - MATLAB - Sputtering Machine - Ultrasound T/R - CNC Machine - DVD driver - Laser alignment }
+	{Proposed a novel method to measure the young's modulus and size of a micron-sized object using photoacoustic methods and performed a 3D simulation to validate the idea along with experiments.}{Dr. S.K Biswas} 
+ %\vfill\null       
+
+\cvevent
+	{\textbf{Jun 21 - Jun 22}}
+	{\faGears \hspace{5pt} Collaborative research @ Medical Physics Lab}
+	{Indian Institute of Science Education and Research-Mohali, Punjab (India)}
+ {\begin{itemize}
+	\item [] \textbf{Responsibilities: } Integrated electronics with fiber optics to perform Optical-CT experiments using Raspberry Pi, Created micro-machined cavities over optical fiber tip, Written code for Monte-Carlo implementation of Cone beam geometry, Performed simulation for Xray-CT experiment in Matlab.\\[5pt]
+    \textbf{My contribution- Interfacing electronics to Raspberry Pi and optical setup alignment.}
+    \end{itemize}} {}   
+%\vfill\null
+
+%---------------------------------------------------------------------------------------
+%	PUBLICATION
+%----------------------------------------------------------------------------------------
+% \vspace{-0.5cm}
+% \vfill\null
+% \cvsection{PUBLICATIONS}
+
+% \cvevent
+% 	{\textbf{UGC Listed}}
+% 	{Title of your research paper}
+% 	{Journal Name (ISSN: XXXX-XXXX) Vol XX, Issue XX, 20XX}
+% 	{Status: Accepted and Published}
+% 	{}
+% \vfill\null
+
+% \cvevent
+% 	{\textbf{SCI - IF X.XXX}}
+% 	{Title of your research paper}
+% 	{Journal Name (ISSN: XXXX-XXXX) Vol XX, Issue XX, 20XX}
+% 	{Status: Under Review}
+% 	{}
+% \vfill\null
+
+% \cvevent
+% 	{\textbf{SCI - IF X.XXX}}
+% 	{Title of your research paper}
+% 	{Journal Name (ISSN: XXXX-XXXX) Vol XX, Issue XX, 20XX}
+% 	{Status: Under Review}
+% 	{}
+% \vfill\null
+
+
+
+%---------------------------------------------------------------------------------------
+%	PROJECTS
+%----------------------------------------------------------------------------------------
+%\vfill\null
+%\vspace{10pt}
+\cvsection{ACADEMIC PROJECTS}
+
+% \vspace{-10pt}
+\cvproject
+	{\textbf{May 21 - Jun 21}}
+	{2D-Simulation of the photo-acoustic effect using COMSOL Multiphysics.}
+        {COMSOL Multiphysics - 2D-Simulation - MATLAB - k-wave simulation - Photoacoustic methods - FEM - Ultrasound signal - Light-Matter Interaction - Paper reading}
+	{Simulated light-matter interaction phenomena using COMSOL multiphysics and the k-wave toolbox of MATLAB to generate and detect photoacoustic signals from chromophores.}
+        {Dr. S.K Biswas}
+ 
+%\vfill\null
+
+\cvproject
+	{\textbf{APR 20 - JUL 20}}
+	{Modeling and analyzing standard electrical circuits using MATLAB’s Simulink and its SIMSCAPE features.}
+        {Simulation - Electrical circuits - MATLAB - Signal processing - Data Analysis - Inverse problem}
+        {Designed basic electrical circuits of transformer and studied voltage variation through simulation in Simulink.}
+        {Dr. Yash Pal}
+%\vfill\null
+
+\cvproject
+	{\textbf{MAY 19 - AUG 19}}
+	{Special Theory of Relativity and Tensor Analysis with an introduction to General relativity.}
+        {Special theory of relativity - Tensor Algebra - General Relativity - Transformations - Three-body problems - Paper reading - Problems \& Solution}
+        {Solved numerical problems of tensor algebra to understand the 4-vector equations of general relativity}
+        {Dr. H.K Jassal}
+%\vfill\null
+
+\cvproject
+	{\textbf{MAY 18 - AUG 18}}
+	{Molecular distribution of n-alkanes in paleo-hydrology and paleo-vegetational changes.}
+        {Paleohydrology - Paleovegetation - Natural proxies count - Natural Organic compound - Reading Research papers}
+        {Read several research papers to understand the jargon of paleoclimatic variations.}
+        {Dr. Anoop Ambili}
+%\vfill\null
+%----------------------------------------------------------------------------------------
+
+%---------------------------------------------------------------------------------------
+%	CERTIFICATES
+
+%\vspace{10pt}
+\cvsection{ONLINE COURSE CERTIFICATES}
+
+\cvcertificate
+	{\textbf{JUL 2022}}
+	{Image processing using MATLAB Onramp.}
+	{MATLAB}
+
+\cvcertificate
+	{\textbf{JUL 2022}}
+	{Deep Learning using MATLAB Onramp}
+	{MATLAB}
+
+\cvcertificate
+	{\textbf{MAY 2022}}
+	{Deep Learning: Logistic Regression with Python}
+	{Coursera}  
+
+\cvcertificate
+	{\textbf{MAY 2020}}
+	{Build Advanced Data Analysis and Transformation Skills in R}
+	{Coursera} 
+
+\cvcertificate
+	{\textbf{JUL 2020}}
+	{Simulation and Modeling of Natural Processes using python}
+	{Coursera}
+ 
+\cvcertificate
+	{\textbf{APR 2020}}
+	{Classify radio signals from space using KERAS}
+	{Coursera} 
+
+%----------------------------------------------------------------------------------------
+%	WORKSHOPS
+% \vspace{15pt}
+\vfill\null
+\cvsection{WORKSHOPS \& CONFERENCES}
+%\vfill\null
+\cvworkshop
+	{\textbf{OCT 2022}}
+	{Student Conference on Optics and Photonics (SCOP) by Optica}
+	{PRL, Ahmedabad }{--- \textbf{Poster Presentation}}
+\cvworkshop
+	{\textbf{DEC 2021}}
+	{International Conference on Atomic, Molecular Optical and Nanophysics with Applications (CAMNP)}
+	{DTU, New Delhi }
+	{--- Attended the conference}
+%\vfill\null
+
+\cvworkshop
+	{\textbf{JUL 2020}}
+	{3D Imaging - Display and Measurement}
+	{SPIE-CSIO, Chandigarh}
+	{--- Attended the conference}
+%\vfill\null
+
+\cvworkshop
+	{\textbf{MAY 2019}}
+	{International Conference on Quantum Foundations, Technology, and Applications (QFTA)}
+	{IISER Mohali (2019)}
+	{--- Attended the conference}
+%\vfill\null
+
+%----------------------------------------------------------------------------------------
+
+% EXTRACURRICULAR
+
+\vfill\null
+\cvsection{EXTRACURRICULAR}
+
+\cvextra
+	{\textbf{JUN 2022}}
+	{Intra-IISER Badminton Championship.}
+	{IISER-Mohali --- \textcolor{gray}{Participated}}
+ 
+\cvextra
+	{\textbf{SEP 2021}}
+	{Yoga Olympiad and Yoga Competition}
+	{IISER-Mohali --- \textcolor{gray}{Participated}}
+
+\cvextra
+	{\textbf{JUL 2019}}
+	{Inter IISER Sports Meet (IISM)}
+	{NISER-Bhubaneshwar --- \textcolor{gray}{Participated}}
+
+\cvextra
+	{\textbf{FEB 2019}}
+	{College annual fest(INSOMNIA)-Rang-e-Royale}
+	{IISER-Mohali --- \textcolor{gray}{2nd prize}}
+
+\cvextra
+	{\textbf{DEC 2018}}
+	{Forest Run Marathon-Shivalik Trail Run III}
+	{Chandigarh --- \textcolor{gray}{Finisher medal}}
+
+%----------------------------------------------------------------------------------------
+\cvsection{DECLARATION}
+
+\vspace{-10pt}
+\begin{center}
+    I hereby declare that the above information is accurate to the best of my knowledge.
+\end{center} 
+
+%----------------------------------------------------------------------------------------
+% hotfixes to create fake space to ensure the whole height is used
+\end{rightcolumn}
+\end{paracol}
+\end{document}
+
